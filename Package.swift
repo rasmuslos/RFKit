@@ -5,17 +5,17 @@ import PackageDescription
 
 let package = Package(
     name: "RFKit",
+    platforms: [
+        .iOS(.v17),
+        .tvOS(.v17),
+        .macOS(.v14),
+        .watchOS(.v10),
+        .visionOS(.v1),
+    ],
     products: [
-        // Products define the executables and libraries a package produces, making them visible to other packages.
-        .library(
-            name: "RFKit",
-            targets: ["RFKit"]),
+        .library(name: "RFKit", targets: ["RFKVisuals"]),
     ],
     targets: [
-        // Targets are the basic building blocks of a package, defining a module or a test suite.
-        // Targets can depend on other targets in this package and products from dependencies.
-        .target(
-            name: "RFKit"),
-
+        .target(name: "RFKVisuals"),
     ]
 )

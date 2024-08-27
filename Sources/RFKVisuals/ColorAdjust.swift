@@ -16,7 +16,7 @@ public extension RFKVisuals {
         var alpha: CGFloat = .zero
         
         UIColor(color).getHue(&hue, saturation: &saturation, brightness: &brightness, alpha: &alpha)
-        return Color(hue: hue, saturation: max(saturation, targetSaturation), brightness: min(brightness, targetBrightness), opacity: alpha)
+        return Color(hue: hue, saturation: max(saturation, targetSaturation), brightness: max(brightness, targetBrightness), opacity: alpha)
     }
     
     static func determineExtreme(_ colors: [Color], lowest: Bool) -> Color? {

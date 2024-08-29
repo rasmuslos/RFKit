@@ -15,8 +15,22 @@ public extension RFKVisuals {
         var brightness: CGFloat = .zero
         var alpha: CGFloat = .zero
         
+        var brightnessCompare: (CGFloat, CGFloat) -> CGFloat
+        var saturationCompare: (CGFloat, CGFloat) -> CGFloat
+        
+        if targetBrightness < 0 {
+            brightnessCompare = min
+        } else {
+            brightnessCompare = max
+        }
+        if targetSaturation < 0 {
+            saturationCompare = min
+        } else {
+            saturationCompare = max
+        }
+        
         UIColor(color).getHue(&hue, saturation: &saturation, brightness: &brightness, alpha: &alpha)
-        return Color(hue: hue, saturation: max(saturation, targetSaturation), brightness: max(brightness, targetBrightness), opacity: alpha)
+        return Color(hue: hue, saturation: saturationCompare(saturation, abs(targetSaturation)), brightness: brightnessCompare(brightness, abs(targetBrightness)), opacity: alpha)
     }
     
     static func determineExtreme(_ colors: [Color], lowest: Bool) -> Color? {

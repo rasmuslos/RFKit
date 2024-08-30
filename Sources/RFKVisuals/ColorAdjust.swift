@@ -84,10 +84,7 @@ public extension RFKVisuals {
         }
     }
     
-    /// Sorts the array by the contrast ratios between the elements
-    ///
-    /// Has a complexity of O(n^2)
-    static func determineContrastExtremes(_ colors: [Color]) -> [Color] {
+    static func contrastRatios(_ colors: [Color]) -> [Color: CGFloat] {
         var contrast = [Color: CGFloat]()
         
         for color in colors {
@@ -100,6 +97,6 @@ public extension RFKVisuals {
             contrast[color] = totalContrast
         }
         
-        return contrast.sorted { $0.value > $1.value }.map { $0.key}
+        return contrast
     }
 }

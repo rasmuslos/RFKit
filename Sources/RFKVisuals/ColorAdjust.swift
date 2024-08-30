@@ -33,7 +33,7 @@ public extension RFKVisuals {
         return Color(hue: hue, saturation: saturationCompare(saturation, abs(targetSaturation)), brightness: brightnessCompare(brightness, abs(targetBrightness)), opacity: alpha)
     }
     
-    static func determineExtreme(_ colors: [Color], lowest: Bool) -> Color? {
+    static func determineBrightestExtreme(_ colors: [Color], lowest: Bool) -> Color? {
         guard var result = colors.first else {
             return nil
         }
@@ -53,7 +53,7 @@ public extension RFKVisuals {
         
         return result
     }
-    static func determineSaturated(_ colors: [Color]) -> Color? {
+    static func determineMostSaturated(_ colors: [Color]) -> Color? {
         let colors = colors.sorted { lhs, rhs in
             var lhsSaturation: CGFloat = .zero
             var rhsSaturation: CGFloat = .zero
@@ -66,7 +66,8 @@ public extension RFKVisuals {
         
         return colors.first
     }
-    static func determineSaturated(_ colors: [Color], threshold: CGFloat) -> [Color] {
+    
+    static func saturationHighPassFilter(_ colors: [Color], threshold: CGFloat) -> [Color] {
         colors.filter { color in
             var saturation: CGFloat = .zero
             UIColor(color).getHue(nil, saturation: &saturation, brightness: nil, alpha: nil)
@@ -74,13 +75,31 @@ public extension RFKVisuals {
             return saturation > threshold
         }
     }
-    
-    static func highPassFilter(_ colors: [Color], threshold: CGFloat) -> [Color] {
+    static func brightnessHighPassFilter(_ colors: [Color], threshold: CGFloat) -> [Color] {
         colors.filter { color in
             var brightness: CGFloat = .zero
             UIColor(color).getHue(nil, saturation: nil, brightness: &brightness, alpha: nil)
             
             return brightness > threshold
         }
+    }
+    
+    /// Sorts the array by the contrast ratios between the elements
+    ///
+    /// Has a complexity of O(n^2)
+    static func determineContrastExtremes(_ colors: [Color]) -> [Color] {
+        var contrast = [Color: CGFloat]()
+        
+        for color in colors {
+            var totalContrast: CGFloat = .zero
+            
+            for other in colors {
+                totalContrast = abs(color.contrastRatio(with: other))
+            }
+            
+            contrast[color] = totalContrast
+        }
+        
+        return contrast.sorted { $0.value > $1.value }.map { $0.key}
     }
 }

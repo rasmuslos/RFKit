@@ -23,8 +23,8 @@ internal extension Color {
         let lhsLuminance = self.luminance()
         let rhsLuminance = other.luminance()
         
-        let darker = min(lhsLuminance, lhsLuminance)
-        let lighter = max(lhsLuminance, lhsLuminance)
+        let darker = min(lhsLuminance, rhsLuminance)
+        let lighter = max(lhsLuminance, rhsLuminance)
         
         return (lighter + 0.05) / (darker + 0.05)
     }

@@ -47,7 +47,7 @@ public extension RFKVisuals {
         return colors.first
     }
     
-    static func brightnessExtremeFilter(_ colors: [Color], threshold: CGFloat = 0.2) -> [Color] {
+    static func brightnessExtremeFilter(_ colors: [Color], threshold: CGFloat = 0.3) -> [Color] {
         colors.filter { color in
             var brightness: CGFloat = .zero
             UIColor(color).getHue(nil, saturation: nil, brightness: &brightness, alpha: nil)

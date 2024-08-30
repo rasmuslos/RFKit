@@ -33,26 +33,6 @@ public extension RFKVisuals {
         return Color(hue: hue, saturation: saturationCompare(saturation, abs(targetSaturation)), brightness: brightnessCompare(brightness, abs(targetBrightness)), opacity: alpha)
     }
     
-    static func determineBrightestExtreme(_ colors: [Color], lowest: Bool) -> Color? {
-        guard var result = colors.first else {
-            return nil
-        }
-        var current: CGFloat = .zero
-        
-        UIColor(result).getHue(nil, saturation: nil, brightness: &current, alpha: nil)
-        
-        for color in colors {
-            var brightness: CGFloat = .zero
-            UIColor(color).getHue(nil, saturation: nil, brightness: &brightness, alpha: nil)
-            
-            if (lowest && brightness < current) || (!lowest && brightness > current) {
-                result = color
-                current = brightness
-            }
-        }
-        
-        return result
-    }
     static func determineMostSaturated(_ colors: [Color]) -> Color? {
         let colors = colors.sorted { lhs, rhs in
             var lhsSaturation: CGFloat = .zero
@@ -67,20 +47,12 @@ public extension RFKVisuals {
         return colors.first
     }
     
-    static func saturationHighPassFilter(_ colors: [Color], threshold: CGFloat) -> [Color] {
-        colors.filter { color in
-            var saturation: CGFloat = .zero
-            UIColor(color).getHue(nil, saturation: &saturation, brightness: nil, alpha: nil)
-            
-            return saturation > threshold
-        }
-    }
-    static func brightnessHighPassFilter(_ colors: [Color], threshold: CGFloat) -> [Color] {
+    static func brightnessExtremeFilter(_ colors: [Color], threshold: CGFloat = 0.2) -> [Color] {
         colors.filter { color in
             var brightness: CGFloat = .zero
             UIColor(color).getHue(nil, saturation: nil, brightness: &brightness, alpha: nil)
             
-            return brightness > threshold
+            return brightness > threshold && 1 - brightness > threshold
         }
     }
     

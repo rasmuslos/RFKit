@@ -30,7 +30,7 @@ public extension RFKVisuals {
      This code is taken from the Apple Accelerate sample project [Calculating the dominant colors in an image](https://developer.apple.com/documentation/accelerate/vimage/calculating_the_dominant_colors_in_an_image).
      Some adjustments have been made to convert everything to a static function and to support Swift Concurrency.
      */
-    static func extractDominantColors(_ k: Int, url: URL) async throws -> [DominantColor] {
+    static func extractDominantColors(_ k: Int, image platformImage: PlatformImage) async throws -> [DominantColor] {
         let dimension = 256 // cover.size.dimensions
         let capacity = dimension * dimension
         
@@ -56,9 +56,7 @@ public extension RFKVisuals {
         
         // MARK: Fetch image
         
-        let (data, _) = try await URLSession.shared.data(from: url)
-        
-        guard let platformImage = UIImage(data: data), let image = platformImage.cgImage else {
+        guard let image = platformImage.cgImage else {
             throw VisualError.fetchFailed
         }
         
